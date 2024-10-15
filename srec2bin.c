@@ -1,6 +1,6 @@
 /*
 	SREC2BIN - Convert Motorola S-Record to binary file
-	Copyright (C) 1998-2009  Anthony Goffart
+	Copyright (C) 1998-2012  Anthony Goffart
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 #include "common.h"
 
 #define HEADER1 "\nSREC2BIN " SREC_VER " - Convert Motorola S-Record to binary file.\n"
-#define HEADER2 "Copyright (c) 2009 Ant Goffart - http://www.s-record.com/\n\n"
+#define HEADER2 "Copyright (c) 2012 Ant Goffart - http://www.s-record.com/\n\n"
 
 #define LINE_LEN 1024
 

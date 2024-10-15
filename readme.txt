@@ -32,6 +32,8 @@ V1.21   Builds under Linux with no modifications
 
 V1.30   Added binsplit
 
+V1.40   Fixed bin2srec ending on address 0xFFFFFFFF
+
 The utilities now compile using the free MinGW GNU based tools
 as well as GCC under Linux using Gnu Make.
 
@@ -39,4 +41,4 @@ This software is provided under the terms of the GNU General Public Licence.
 See the enclosed file gpl-3.0.txt
 
 Ant Goffart
-March 2009
+July 2012

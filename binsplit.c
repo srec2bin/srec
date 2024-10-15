@@ -1,6 +1,6 @@
 /*
 	BINSPLIT - Split a binary file into 2 or 4 interleaved pieces
-	Copyright (C) 2010 Anthony Goffart
+	Copyright (C) 2010-2012  Anthony Goffart
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 #include "common.h"
 
 #define HEADER1 "\nBINSPLIT " SREC_VER " - Split a binary file into 2 or 4 interleaved pieces.\n"
-#define HEADER2 "Copyright (c) 2010 Ant Goffart - http://www.s-record.com/\n\n"
+#define HEADER2 "Copyright (C) 2012 Ant Goffart - http://www.s-record.com/\n\n"
 
 int verbose = TRUE;
 int num_files = 2;

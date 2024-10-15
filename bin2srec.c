@@ -1,6 +1,6 @@
 /*
 	BIN2SREC  - Convert binary to Motorola S-Record file
-	Copyright (C) 1998-2009  Anthony Goffart
+	Copyright (C) 1998-2012  Anthony Goffart
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 #include "common.h"
 
 #define HEADER1 "\nBIN2SREC " SREC_VER " - Convert binary to Motorola S-Record file.\n"
-#define HEADER2 "Copyright (c) 2009 Ant Goffart - http://www.s-record.com/\n\n"
+#define HEADER2 "Copyright (c) 2012 Ant Goffart - http://www.s-record.com/\n\n"
 
 char *filename;
 FILE *infile;
@@ -93,12 +93,14 @@ void process(void)
 	if (do_headers)
 		printf("S00600004844521B\n");		/* Header record */
 
-	for (address = addr_offset; address <= max_addr; address += line_length)
+	address = addr_offset;
+
+	for (;;)
 	{
 		if (verbose)
 			fprintf(stderr, "Processing %08Xh\r", address);
 
-		this_line = min(line_length, 1 + max_addr - address);
+		this_line = min(line_length, (max_addr - address) + 1);
 		byte_count = (addr_bytes + this_line + 1);
 		printf("S%d%02X", addr_bytes - 1, byte_count);
 
@@ -122,6 +124,12 @@ void process(void)
 		printf("%02X\n", 255 - checksum);
 
 		record_count++;
+
+		/* check before adding to allow for finifing at 0xffffffff */
+		if ((address - 1 + line_length) >= max_addr)
+			break;
+
+		address += line_length;
 	}
 
 	if (do_headers)
