@@ -31,10 +31,10 @@ FILE *infile;
 uint32_t addr_offset = 0;
 uint32_t begin_addr;
 uint32_t end_addr;
-int addr_bytes = 2;
-int do_headers = true;
-int verbose = true;
-int line_length = 32;
+uint32_t addr_bytes = 2;
+bool do_headers = true;
+bool verbose = true;
+uint32_t line_length = 32;
 
 
 /***************************************************************************/
@@ -61,8 +61,8 @@ void process(void)
 {
 	int i;
 	uint32_t max_addr, address;
-	int byte_count, this_line;
-	unsigned char checksum;
+	uint32_t byte_count, this_line;
+	uint8_t checksum;
 	uint32_t c;
 	int record_count = 0;
 
@@ -113,7 +113,7 @@ void process(void)
 			checksum += c;
 		}
 
-		if(fread(buf, 1, this_line, infile));
+		if(fread(buf, 1, this_line, infile)) {}
 
 		for (i = 0; i < this_line; i++)
 		{
@@ -169,8 +169,8 @@ int main(int argc, char *argv[])
 {
 	int i;
 	uint32_t size;
-	int offset_specified = false;
-	int end_specified = false;
+	bool offset_specified = false;
+	bool end_specified = false;
 
 	for (i = 1; i < argc; i++)
 	{
