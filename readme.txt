@@ -1,5 +1,6 @@
 For more information, visit the website at http://www.s-record.com/
 
+
 BIN2SREC
 --------
 
@@ -10,7 +11,7 @@ V1.10   Allows the user to select part of the file - i.e. specify a start and
 
 V1.11   Makefile mofified and GNU licence added.
 
-V1.20   Makefiles merged and minor bug fixes.
+
 
 SREC2BIN
 --------
@@ -23,12 +24,17 @@ V1.10   Ignores S0 records with misc information which caused errors.
 
 V1.11   Makefile mofified and GNU licence added.
 
-V1.20   Makefiles merged and minor bug fixes.
+Combined
+--------
 
-The utilities now compile using the free MinGW GNU based tools.
+V1.20   Makefiles merged and minor bug fixes.
+V1.21   Builds under Linux with no modifications
+
+The utilities now compile using the free MinGW GNU based tools
+as well as GCC under Linux using Gnu Make.
 
 This software is provided under the terms of the GNU General Public Licence.
-See the enclosed file gpl.txt
+See the enclosed file gpl-3.0.txt
 
 Ant Goffart
-October 2004
+March 2009
