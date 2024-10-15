@@ -42,6 +42,7 @@ V1.46   Fix srec2bin creation when last address is 0xFFFFFFFFF
 
 V1.50   Increase buffer to cope with data fields larger than 32 bytes
         Speed improvement when creating output binary file
+V1.51   Print unsigned integers using %u formatter
 
 The utilities now compile using the free MinGW GNU based tools
 as well as GCC under Linux using Gnu Make.
@@ -50,4 +51,4 @@ This software is provided under the terms of the GNU General Public Licence.
 See the enclosed file gpl-3.0.txt
 
 Ant Goffart
-February 2019
+October 2019

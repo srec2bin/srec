@@ -87,7 +87,7 @@ void process(void)
 		fprintf(stderr, "End address     = %Xh\n", end_addr);
 		fprintf(stderr, "Address offset  = %Xh\n", addr_offset);
 		fprintf(stderr, "Maximum address = %Xh\n", max_addr);
-		fprintf(stderr, "Address bytes   = %d\n", addr_bytes);
+		fprintf(stderr, "Address bytes   = %u\n", addr_bytes);
 	}
 
 	if (do_headers)
@@ -102,7 +102,7 @@ void process(void)
 
 		this_line = min(line_length, (max_addr - address) + 1);
 		byte_count = (addr_bytes + this_line + 1);
-		printf("S%d%02X", addr_bytes - 1, byte_count);
+		printf("S%u%02X", addr_bytes - 1, byte_count);
 
 		checksum = byte_count;
 
@@ -146,7 +146,7 @@ void process(void)
 		}
 
 		byte_count = (addr_bytes + 1);
-		printf("S%d%02X", 11 - addr_bytes, byte_count);
+		printf("S%u%02X", 11 - addr_bytes, byte_count);
 
 		checksum = byte_count;
 
@@ -196,7 +196,7 @@ int main(int argc, char *argv[])
 
 		else if (!strcmp(argv[i], "-a"))
 		{
-			sscanf(argv[++i], "%d", &addr_bytes);
+			sscanf(argv[++i], "%u", &addr_bytes);
 			addr_bytes = max(2, addr_bytes);
 			addr_bytes = min(4, addr_bytes);
 			continue;
@@ -204,7 +204,7 @@ int main(int argc, char *argv[])
 
 		else if (!strcmp(argv[i], "-l"))
 		{
-			sscanf(argv[++i], "%d", &line_length);
+			sscanf(argv[++i], "%u", &line_length);
 			line_length = max(8, line_length);
 			line_length = min(32, line_length);
 			continue;

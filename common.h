@@ -1,7 +1,7 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-#define SREC_VER "1.50"
+#define SREC_VER "1.51"
 
 #define HEADER2 "Copyright (c) 2000-2019 Ant Goffart - http://www.s-record.com/\n\n"
 

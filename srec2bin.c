@@ -98,7 +98,7 @@ void parse(int scan, uint32_t *max, uint32_t *min)
 					address -= min_addr;
 
 					if (verbose)
-						fprintf(stderr, "Writing %3d bytes at %08X\r", byte_count, address);
+						fprintf(stderr, "Writing %3u bytes at %08X\r", byte_count, address);
 
 					j = 0;
 					for (i = (addr_bytes * 2) + 4; i < (addr_bytes * 2) + (byte_count * 2) + 4; i += 2)
@@ -150,7 +150,7 @@ int process(void)
 		fprintf(stderr, "Minimum address  = %Xh\n", min_addr);
 		fprintf(stderr, "Maximum address  = %Xh\n", max_addr);
 		i = max_addr - min_addr + 1;
-		fprintf(stderr, "Binary file size = %d (%Xh) bytes.\n", i, i);
+		fprintf(stderr, "Binary file size = %u (%Xh) bytes.\n", i, i);
 	}
 
 	if ((outfile = fopen(outfilename, "wb")) != NULL)
