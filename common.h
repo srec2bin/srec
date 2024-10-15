@@ -1,7 +1,7 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-#define SREC_VER "1.40"
+#define SREC_VER "1.41"
 
 #include <stdio.h>
 #include <stdint.h>

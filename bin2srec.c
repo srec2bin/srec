@@ -51,7 +51,7 @@ void syntax(void)
 	fprintf(stderr, "-a <addrsize>    Number of bytes used for address (2-4),\n");
 	fprintf(stderr, "                  default = minimum needed for maximum address.\n");
 	fprintf(stderr, "-l <linelength>  Number of bytes per line (8-32), default = 32.\n");
-	fprintf(stderr, "-s               Supress header and footer records.\n");
+	fprintf(stderr, "-s               Suppress header and footer records.\n");
 	fprintf(stderr, "-q               Quiet mode - no output except S-Record.\n");
 }
 
@@ -125,7 +125,7 @@ void process(void)
 
 		record_count++;
 
-		/* check before adding to allow for finifing at 0xffffffff */
+		/* check before adding to allow for finishing at 0xffffffff */
 		if ((address - 1 + line_length) >= max_addr)
 			break;
 

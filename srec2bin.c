@@ -148,7 +148,7 @@ void process(void)
 
 	if (verbose)
 	{
-		fprintf(stderr, "Mimimum address  = %Xh\n", min_addr);
+		fprintf(stderr, "Minimum address  = %Xh\n", min_addr);
 		fprintf(stderr, "Maximum address  = %Xh\n", max_addr);
 		i = max_addr - min_addr + 1;
 		fprintf(stderr, "Binary file size = %d (%Xh) bytes.\n", i, i);
