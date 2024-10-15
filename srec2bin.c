@@ -23,7 +23,6 @@
 #include "common.h"
 
 #define HEADER1 "\nSREC2BIN " SREC_VER " - Convert Motorola S-Record to binary file.\n"
-#define HEADER2 "Copyright (c) 2012 Ant Goffart - http://www.s-record.com/\n\n"
 
 #define LINE_LEN 1024
 
@@ -121,7 +120,7 @@ void parse(int scan, uint32_t *max, uint32_t *min)
 
 /***************************************************************************/
 
-void process(void)
+int process(void)
 {
 	uint32_t i;
 	uint32_t blocks, remain;
@@ -168,11 +167,13 @@ void process(void)
 	else
 	{
 		fprintf(stderr, "Cant create output file %s.\n", outfilename);
-		return;
+		return(1);
 	}
 
 	if (verbose)
 		fprintf(stderr, "Processing complete          \n");
+
+	return(0);
 }
 
 /***************************************************************************/
@@ -180,6 +181,7 @@ void process(void)
 int main(int argc, char *argv[])
 {
 	int i;
+	int result = 0;
 
 	for (i = 1; i < argc; i++)
 	{
@@ -223,9 +225,9 @@ int main(int argc, char *argv[])
 
 	if ((infile = fopen(infilename, "rb")) != NULL)
 	{
-		process();
+		result = process();
 		fclose(infile);
-		return(0);
+		return(result);
 	}
 	else
 	{

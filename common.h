@@ -1,7 +1,9 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-#define SREC_VER "1.41"
+#define SREC_VER "1.42"
+
+#define HEADER2 "Copyright (c) 2000-2013 Ant Goffart - http://www.s-record.com/\n\n"
 
 #include <stdio.h>
 #include <stdint.h>

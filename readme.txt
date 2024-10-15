@@ -34,6 +34,7 @@ V1.30   Added binsplit
 
 V1.40   Fixed bin2srec ending on address 0xFFFFFFFF
 V1.41   Fixed spelling errors
+V1.42   Changed return code from srec2bin if output file fails to be created
 
 The utilities now compile using the free MinGW GNU based tools
 as well as GCC under Linux using Gnu Make.

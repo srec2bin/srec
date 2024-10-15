@@ -23,7 +23,6 @@
 #include "common.h"
 
 #define HEADER1 "\nBIN2SREC " SREC_VER " - Convert binary to Motorola S-Record file.\n"
-#define HEADER2 "Copyright (c) 2012 Ant Goffart - http://www.s-record.com/\n\n"
 
 char *filename;
 FILE *infile;

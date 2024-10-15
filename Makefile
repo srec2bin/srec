@@ -1,7 +1,7 @@
 # Makefile
 
-CFLAGS=-c -Wall -MMD
-LDFLAGS=-fno-exceptions -s
+CFLAGS = -c -Wall -O2 -MMD
+LDFLAGS = -fno-exceptions -s
 
 MAKEFLAGS += -s
 
@@ -11,6 +11,8 @@ ifeq ($(OS), Windows_NT)
 else
 	CC = gcc
 endif
+
+LD = $(CC)
 
 BIN2SREC_EXE = bin2srec$(EXE_SUFFIX)
 SREC2BIN_EXE = srec2bin$(EXE_SUFFIX)
@@ -42,15 +44,15 @@ RULES = $(BIN2SREC_SRC:.c=.d) $(SREC2BIN_SRC:.c=.d) $(BINSPLIT_SRC:.c=.d)
 
 $(BIN2SREC_EXE): $(BIN2SREC_OBJS)
 	@echo Linking $@
-	$(CC) $(LDFLAGS) $^ -o $@
+	$(LD) -o $@ $^ $(LDFLAGS)
 
 $(SREC2BIN_EXE): $(SREC2BIN_OBJS)
 	@echo Linking $@
-	$(CC) $(LDFLAGS) $^ -o $@
+	$(LD) -o $@ $^ $(LDFLAGS)
 
 $(BINSPLIT_EXE): $(BINSPLIT_OBJS)
 	@echo Linking $@
-	$(CC) $(LDFLAGS) $^ -o $@
+	$(LD) -o $@ $^ $(LDFLAGS)
 
 clean:
 	-$(RM) $(BIN2SREC_OBJS) $(SREC2BIN_OBJS) $(BINSPLIT_OBJS)
