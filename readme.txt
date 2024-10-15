@@ -30,6 +30,8 @@ Combined
 V1.20   Makefiles merged and minor bug fixes.
 V1.21   Builds under Linux with no modifications
 
+V1.30   Added binsplit
+
 The utilities now compile using the free MinGW GNU based tools
 as well as GCC under Linux using Gnu Make.
 
