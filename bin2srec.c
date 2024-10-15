@@ -1,7 +1,7 @@
 /*
 
 BIN2SREC  - Convert binary to Motorola S-Record file
-Copyright (c) 2002  Anthony Goffart
+Copyright (c) 1998-2004  Anthony Goffart
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -21,19 +21,21 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
 #include <sys/stat.h>
 
-#define HEADER1 "\nBIN2SREC V1.11 - Convert binary to Motorola S-Record file.\n"
+#define HEADER1 "\nBIN2SREC V1.20 - Convert binary to Motorola S-Record file.\n"
 #define HEADER2 "Copyright (c) 2002 Ant Goffart - http://www.s-record.com/\n\n"
 
-#define TRUE -1
+#define TRUE 1
 #define FALSE 0
 
-typedef unsigned long int dword;
-typedef unsigned int word;
+#define max(a,b) (((a)>(b))?(a):(b))
+#define min(a,b) (((a)<(b))?(a):(b))
 
-char filename[256] = "";
+typedef unsigned long dword;
+typedef unsigned short word;
+
+char *filename;
 FILE *infile;
 
 dword addr_offset = 0;
@@ -82,18 +84,18 @@ dword file_size(FILE *f)
 
 void syntax(void)
 {
-   printf(HEADER1);
-   printf(HEADER2);
-   printf("Syntax: BIN2SREC <options> INFILE > OUTFILE\n\n");
-   printf("-help            Show this help.\n");
-   printf("-b <begin>       Address to begin at in binary file (hex), default = 0.\n");
-   printf("-e <end>         Address to end at in binary file (hex), default = end of file.\n");
-   printf("-o <offset>      Generated address offset (hex), default = begin address.\n");
-   printf("-a <addrsize>    Number of bytes used for address (2-4),\n");
-   printf("                  default = minimum needed for maximum address.\n");
-   printf("-l <linelength>  Number of bytes per line (8-32), default = 32.\n");
-   printf("-s               Supress header and footer records.\n");
-   printf("-q               Quiet mode - no output except S-Record.\n");
+   fprintf(stderr, HEADER1);
+   fprintf(stderr, HEADER2);
+   fprintf(stderr, "Syntax: BIN2SREC <options> INFILE > OUTFILE\n\n");
+   fprintf(stderr, "-help            Show this help.\n");
+   fprintf(stderr, "-b <begin>       Address to begin at in binary file (hex), default = 0.\n");
+   fprintf(stderr, "-e <end>         Address to end at in binary file (hex), default = end of file.\n");
+   fprintf(stderr, "-o <offset>      Generated address offset (hex), default = begin address.\n");
+   fprintf(stderr, "-a <addrsize>    Number of bytes used for address (2-4),\n");
+   fprintf(stderr, "                  default = minimum needed for maximum address.\n");
+   fprintf(stderr, "-l <linelength>  Number of bytes per line (8-32), default = 32.\n");
+   fprintf(stderr, "-s               Supress header and footer records.\n");
+   fprintf(stderr, "-q               Quiet mode - no output except S-Record.\n");
 }
 
 /***************************************************************************/
@@ -148,7 +150,7 @@ void process(void)
       for (i = addr_bytes - 1; i >= 0; i--)
       {
          c = (address >> (i << 3)) & 0xff;
-         printf("%02X", c);
+         printf("%02lX", c);
          checksum += c;
       }
 
@@ -178,7 +180,7 @@ void process(void)
       for (i = addr_bytes - 1; i >= 0; i--)
       {
          c = (addr_offset >> (i << 3)) & 0xff;
-         printf("%02X", c);
+         printf("%02lX", c);
          checksum += c;
       }
       printf("%02X\n", 255 - checksum);
@@ -200,7 +202,7 @@ int main(int argc, char *argv[])
 
    for (i = 1; i < argc; i++)
    {
-      if(!strcmp(argv[i], "-o"))
+      if (!strcmp(argv[i], "-o"))
       {
          sscanf(argv[++i], "%s", saddr);
          addr_offset = atoh(saddr);
@@ -208,14 +210,14 @@ int main(int argc, char *argv[])
          continue;
       }
 
-      else if(!strcmp(argv[i], "-b"))
+      else if (!strcmp(argv[i], "-b"))
       {
          sscanf(argv[++i], "%s", saddr);
          begin_addr = atoh(saddr);
          continue;
       }
 
-      else if(!strcmp(argv[i], "-e"))
+      else if (!strcmp(argv[i], "-e"))
       {
          sscanf(argv[++i], "%s", saddr);
          end_addr = atoh(saddr);
@@ -223,7 +225,7 @@ int main(int argc, char *argv[])
          continue;
       }
 
-      else if(!strcmp(argv[i], "-a"))
+      else if (!strcmp(argv[i], "-a"))
       {
          sscanf(argv[++i], "%d", &addr_bytes);
          addr_bytes = max(2, addr_bytes);
@@ -231,7 +233,7 @@ int main(int argc, char *argv[])
          continue;
       }
 
-      else if(!strcmp(argv[i], "-l"))
+      else if (!strcmp(argv[i], "-l"))
       {
          sscanf(argv[++i], "%d", &line_length);
          line_length = max(8, line_length);
@@ -239,19 +241,19 @@ int main(int argc, char *argv[])
          continue;
       }
 
-      else if(!strcmp(argv[i], "-s"))
+      else if (!strcmp(argv[i], "-s"))
       {
          do_headers = FALSE;
          continue;
       }
 
-      else if(!strcmp(argv[i], "-q"))
+      else if (!strcmp(argv[i], "-q"))
       {
          verbose = FALSE;
          continue;
       }
 
-      else if(!strncmp(argv[i], "-h", 2))       /* -h or -help */
+      else if (!strncmp(argv[i], "-h", 2))       /* -h or -help */
       {
          syntax();
          return(0);
@@ -259,19 +261,18 @@ int main(int argc, char *argv[])
 
       else
       {
-         sscanf(argv[i], "%s", filename);
-         strupr(filename);
+         filename = argv[i];
       }
    }
 
-   if(!strcmp(filename, ""))
+   if (filename == NULL)
    {
       syntax();
       fprintf(stderr, "\n** No input filename specified\n");
       return(1);
    }
 
-   if((infile = fopen(filename, "rb")) != NULL)
+   if ((infile = fopen(filename, "rb")) != NULL)
    {
       size = file_size(infile) - 1;
 

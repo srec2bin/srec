@@ -1,7 +1,7 @@
 /*
 
 SREC2BIN - Convert Motorola S-Record to binary file
-Copyright (c) 2002  Anthony Goffart
+Copyright (c) 2001-2004  Anthony Goffart
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -21,22 +21,24 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
 #include <sys/stat.h>
 
-#define HEADER1 "\nSREC2BIN V1.11 - Convert Motorola S-Record to binary file.\n"
+#define HEADER1 "\nSREC2BIN V1.20 - Convert Motorola S-Record to binary file.\n"
 #define HEADER2 "Copyright (c) 2002 Ant Goffart - http://www.s-record.com/\n\n"
 
-#define TRUE -1
+#define TRUE 1
 #define FALSE 0
 
-#define LINE_LEN 256
+#define max(a,b) (((a)>(b))?(a):(b))
+#define min(a,b) (((a)<(b))?(a):(b))
 
-typedef unsigned long int dword;
-typedef unsigned int word;
+#define LINE_LEN 1024
 
-char infilename[256] = "";
-char outfilename[256] = "";
+typedef unsigned long dword;
+typedef unsigned short word;
+
+char *infilename;
+char *outfilename;
 FILE *infile, *outfile;
 
 dword max_addr = 0;
@@ -96,14 +98,14 @@ dword file_size(FILE *f)
 
 void syntax(void)
 {
-   printf(HEADER1);
-   printf(HEADER2);
-   printf("Syntax: SREC2BIN <options> INFILE OUTFILE\n\n");
-   printf("-help            Show this help.\n");
-   printf("-o <offset>      Start address offset (hex), default = 0.\n");
-   printf("-a <addrsize>    Minimum binary file size (hex), default = 0.\n");
-   printf("-f <fillbyte>    Filler byte (hex), default = FF.\n");
-   printf("-q               Quiet mode\n");
+   fprintf(stderr, HEADER1);
+   fprintf(stderr, HEADER2);
+   fprintf(stderr, "Syntax: SREC2BIN <options> INFILE OUTFILE\n\n");
+   fprintf(stderr, "-help            Show this help.\n");
+   fprintf(stderr, "-o <offset>      Start address offset (hex), default = 0.\n");
+   fprintf(stderr, "-a <addrsize>    Minimum binary file size (hex), default = 0.\n");
+   fprintf(stderr, "-f <fillbyte>    Filler byte (hex), default = FF.\n");
+   fprintf(stderr, "-q               Quiet mode\n");
 }
 
 /***************************************************************************/
@@ -209,7 +211,7 @@ void process(void)
       fprintf(stderr, "Binary file size = %ld (%lXh) bytes.\n", i, i);
    }
 
-   if((outfile = fopen(outfilename, "wb")) != NULL)
+   if ((outfile = fopen(outfilename, "wb")) != NULL)
    {
       for (i = 0; i < 32; i++)
          buf[i] = filler;
@@ -223,7 +225,7 @@ void process(void)
    else
    {
       fprintf(stderr, "Cant create output file %s.\n", outfilename);
-      exit(1);
+      return;
    }
 
    if (verbose)
@@ -239,34 +241,34 @@ int main(int argc, char *argv[])
 
    for (i = 1; i < argc; i++)
    {
-      if(!strcmp(argv[i], "-q"))
+      if (!strcmp(argv[i], "-q"))
       {
          verbose = FALSE;
          continue;
       }
 
-      else if(!strcmp(argv[i], "-a"))
+      else if (!strcmp(argv[i], "-a"))
       {
          sscanf(argv[++i], "%s", tmp);
          max_addr = atoh(tmp) - 1;
          continue;
       }
 
-      else if(!strcmp(argv[i], "-o"))
+      else if (!strcmp(argv[i], "-o"))
       {
          sscanf(argv[++i], "%s", tmp);
          min_addr = atoh(tmp);
          continue;
       }
 
-      else if(!strcmp(argv[i], "-f"))
+      else if (!strcmp(argv[i], "-f"))
       {
          sscanf(argv[++i], "%s", tmp);
          filler = atoh(tmp) & 0xff;
          continue;
       }
 
-      else if(!strncmp(argv[i], "-h", 2))       /* -h or -help */
+      else if (!strncmp(argv[i], "-h", 2))       /* -h or -help */
       {
          syntax();
          return(0);
@@ -274,28 +276,26 @@ int main(int argc, char *argv[])
 
       else
       {
-         sscanf(argv[i], "%s", infilename);
-         strupr(infilename);
-         sscanf(argv[++i], "%s", outfilename);
-         strupr(outfilename);
+         infilename = argv[i];
+         outfilename = argv[++i];
       }
    }
 
-   if(!strcmp(infilename, ""))
+   if (infilename == NULL)
    {
       syntax();
       fprintf(stderr, "\n** No input filename specified\n");
       return(1);
    }
 
-   if(!strcmp(outfilename, ""))
+   if (outfilename == NULL)
    {
       syntax();
       fprintf(stderr, "\n** No output filename specified\n");
       return(1);
    }
 
-   if((infile = fopen(infilename, "rb")) != NULL)
+   if ((infile = fopen(infilename, "rb")) != NULL)
    {
       process();
       fclose(infile);
